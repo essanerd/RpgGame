@@ -1,0 +1,14 @@
+/Users/noman/Documents/Essa/code/vscode-practise/RpgGame/obj/Debug/net10.0/RpgGame.GeneratedMSBuildEditorConfig.editorconfig
+/Users/noman/Documents/Essa/code/vscode-practise/RpgGame/obj/Debug/net10.0/RpgGame.AssemblyInfoInputs.cache
+/Users/noman/Documents/Essa/code/vscode-practise/RpgGame/obj/Debug/net10.0/RpgGame.AssemblyInfo.cs
+/Users/noman/Documents/Essa/code/vscode-practise/RpgGame/obj/Debug/net10.0/RpgGame.csproj.CoreCompileInputs.cache
+/Users/noman/Documents/Essa/code/vscode-practise/RpgGame/bin/Debug/net10.0/RpgGame
+/Users/noman/Documents/Essa/code/vscode-practise/RpgGame/bin/Debug/net10.0/RpgGame.deps.json
+/Users/noman/Documents/Essa/code/vscode-practise/RpgGame/bin/Debug/net10.0/RpgGame.runtimeconfig.json
+/Users/noman/Documents/Essa/code/vscode-practise/RpgGame/bin/Debug/net10.0/RpgGame.dll
+/Users/noman/Documents/Essa/code/vscode-practise/RpgGame/bin/Debug/net10.0/RpgGame.pdb
+/Users/noman/Documents/Essa/code/vscode-practise/RpgGame/obj/Debug/net10.0/RpgGame.dll
+/Users/noman/Documents/Essa/code/vscode-practise/RpgGame/obj/Debug/net10.0/refint/RpgGame.dll
+/Users/noman/Documents/Essa/code/vscode-practise/RpgGame/obj/Debug/net10.0/RpgGame.pdb
+/Users/noman/Documents/Essa/code/vscode-practise/RpgGame/obj/Debug/net10.0/RpgGame.genruntimeconfig.cache
+/Users/noman/Documents/Essa/code/vscode-practise/RpgGame/obj/Debug/net10.0/ref/RpgGame.dll
