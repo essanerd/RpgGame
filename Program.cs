@@ -1,4 +1,5 @@
-﻿namespace Rpg
+﻿```csharp
+namespace Rpg
 {
     class Program
     {
@@ -29,6 +30,7 @@
             Player joe = new Player("Joe", 100, 5, mace, inventory);
 
             joe.Potions = 3;
+            joe.Shield = 50;
 
             // =========================
             // ENEMY
@@ -47,6 +49,7 @@
             Console.WriteLine($"Level: {joe.Level}");
             Console.WriteLine($"Health: {joe.Health}");
             Console.WriteLine($"Potions: {joe.Potions}");
+            Console.WriteLine($"Shield: {joe.Shield}");
             Console.WriteLine();
 
             Console.WriteLine($"Enemy: {orc.Name}");
@@ -58,15 +61,22 @@
             Console.WriteLine();
             Console.WriteLine("===== BATTLE START =====");
 
+            Random random = new Random();
+
             // =========================
             // COMBAT LOOP
             // =========================
 
             while (joe.IsAlive() && orc.IsAlive())
             {
+                // =========================
+                // JOE'S ACTION
+                // =========================
+
                 Console.WriteLine();
                 Console.WriteLine("===== YOUR TURN =====");
                 Console.WriteLine($"Health: {joe.Health}");
+                Console.WriteLine($"Shield: {joe.Shield}");
                 Console.WriteLine($"Level: {joe.Level}");
                 Console.WriteLine($"XP: {joe.Experience}");
                 Console.WriteLine($"Potions: {joe.Potions}");
@@ -80,34 +90,45 @@
                 Console.Write("Choose an action: ");
                 string choice = Console.ReadLine();
 
-                // =========================
-                // PLAYER ACTION
-                // =========================
-
                 switch (choice)
                 {
+                    // =========================
                     // ATTACK
+                    // =========================
+
                     case "1":
 
-                        joe.Attack(orc);
-
-                        Console.WriteLine($"Orc health: {orc.Health}");
+                        // Check if Orc is dodging
+                        if (orc.IsDodging)
+                        {
+                            Console.WriteLine("The Orc dodged your attack!");
+                            orc.IsDodging = false;
+                        }
+                        else
+                        {
+                            joe.Attack(orc);
+                            Console.WriteLine($"Orc health: {orc.Health}");
+                        }
 
                         break;
 
+                    // =========================
                     // POTION
+                    // =========================
+
                     case "2":
 
                         if (!joe.UsePotion())
                         {
-                            // No potion was used.
-                            // Give Joe another turn.
                             continue;
                         }
 
                         break;
 
+                    // =========================
                     // INVENTORY
+                    // =========================
+
                     case "3":
 
                         Console.WriteLine();
@@ -121,19 +142,16 @@
                         if (weaponChoice == "1")
                         {
                             joe.EquipWeapon(inventory.GetWeapon(0));
-
                             Console.WriteLine("Joe equipped the Mace!");
                         }
                         else if (weaponChoice == "2")
                         {
                             joe.EquipWeapon(inventory.GetWeapon(1));
-
                             Console.WriteLine("Joe equipped the Axe!");
                         }
                         else if (weaponChoice == "3")
                         {
                             joe.EquipWeapon(inventory.GetWeapon(2));
-
                             Console.WriteLine("Joe equipped the Sword!");
                         }
                         else
@@ -141,10 +159,8 @@
                             Console.WriteLine("Invalid weapon choice!");
                         }
 
-                        // Inventory doesn't count as an attack.
                         continue;
 
-                    // INVALID OPTION
                     default:
 
                         Console.WriteLine("Invalid choice!");
@@ -161,16 +177,103 @@
                 }
 
                 // =========================
+                // JOE'S DEFENSE
+                // =========================
+
+                Console.WriteLine();
+                Console.WriteLine("===== CHOOSE YOUR DEFENSE =====");
+                Console.WriteLine("1. Shield");
+                Console.WriteLine("2. Dodge");
+                Console.WriteLine("3. Nothing");
+
+                Console.Write("Choose your defense: ");
+                string defenseChoice = Console.ReadLine();
+
+                if (defenseChoice == "1")
+                {
+                    joe.IsShielding = true;
+                    joe.IsDodging = false;
+
+                    Console.WriteLine("Joe raised his shield!");
+                }
+                else if (defenseChoice == "2")
+                {
+                    joe.IsDodging = true;
+                    joe.IsShielding = false;
+
+                    Console.WriteLine("Joe is ready to dodge!");
+                }
+                else if (defenseChoice == "3")
+                {
+                    joe.IsShielding = false;
+                    joe.IsDodging = false;
+
+                    Console.WriteLine("Joe chose no defense.");
+                }
+                else
+                {
+                    Console.WriteLine("Invalid defense choice!");
+                    continue;
+                }
+
+                // =========================
                 // ORC'S TURN
                 // =========================
 
                 Console.WriteLine();
                 Console.WriteLine("===== ORC'S TURN =====");
 
-                orc.Attack(joe);
+                // Joe dodges
+                if (joe.IsDodging)
+                {
+                    int dodgeChance = random.Next(1, 101);
+
+                    if (dodgeChance <= 30)
+                    {
+                        Console.WriteLine("Joe dodged the Orc's attack!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Joe failed to dodge!");
+
+                        orc.Attack(joe);
+                    }
+                }
+
+                // Joe uses shield
+                else if (joe.IsShielding)
+                {
+                    Console.WriteLine("Joe blocks the attack with his shield!");
+
+                    joe.BlockAttack(orc.Weapon.Damage);
+                }
+
+                // Joe has no defense
+                else
+                {
+                    orc.Attack(joe);
+                }
+
+                // Reset Joe's defense
+                joe.IsDodging = false;
+                joe.IsShielding = false;
 
                 Console.WriteLine($"Joe health: {joe.Health}");
-            }
+
+                // =========================
+                // CHECK IF JOE DIED
+                // =========================
+
+                if (!joe.IsAlive())
+                {
+                    break;
+                }
+
+                // =========================
+                // ORC CHOOSES DEFENSE
+                // =========================
+                
+                orc.ChooseDefense();
 
             // =========================
             // BATTLE OVER
@@ -192,3 +295,5 @@
         }
     }
 }
+```
+
