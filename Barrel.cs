@@ -1,3 +1,5 @@
+# Test comment
+
 namespace Rpg{
     class Barrel : IDamageable
 {
