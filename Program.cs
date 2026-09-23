@@ -1,5 +1,4 @@
-﻿```csharp
-namespace Rpg
+﻿namespace Rpg
 {
     class Program
     {
@@ -98,7 +97,6 @@ namespace Rpg
 
                     case "1":
 
-                        // Check if Orc is dodging
                         if (orc.IsDodging)
                         {
                             Console.WriteLine("The Orc dodged your attack!");
@@ -223,7 +221,6 @@ namespace Rpg
                 Console.WriteLine();
                 Console.WriteLine("===== ORC'S TURN =====");
 
-                // Joe dodges
                 if (joe.IsDodging)
                 {
                     int dodgeChance = random.Next(1, 101);
@@ -238,23 +235,23 @@ namespace Rpg
 
                         orc.Attack(joe);
                     }
+                        orc.ChooseAction(joe);
                 }
-
-                // Joe uses shield
                 else if (joe.IsShielding)
                 {
                     Console.WriteLine("Joe blocks the attack with his shield!");
 
                     joe.BlockAttack(orc.Weapon.Damage);
                 }
-
-                // Joe has no defense
                 else
                 {
                     orc.Attack(joe);
                 }
 
-                // Reset Joe's defense
+                // =========================
+                // RESET JOE'S DEFENSE
+                // =========================
+
                 joe.IsDodging = false;
                 joe.IsShielding = false;
 
@@ -272,8 +269,9 @@ namespace Rpg
                 // =========================
                 // ORC CHOOSES DEFENSE
                 // =========================
-                
+
                 orc.ChooseDefense();
+            }
 
             // =========================
             // BATTLE OVER
@@ -295,5 +293,4 @@ namespace Rpg
         }
     }
 }
-```
 

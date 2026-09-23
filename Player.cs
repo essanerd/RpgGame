@@ -5,6 +5,7 @@ namespace Rpg
         public int Level { get; set; }
         public int Experience { get; set; }
         public int Potions { get; set; }
+        public int SpecialCooldown { get; set; }
 
         public Weapon Weapon { get; set; }
         public Inventory Inventory { get; set; }
@@ -21,8 +22,56 @@ namespace Rpg
         {
             Console.WriteLine($"{Name} attacks!");
 
-            target.TakeDamage(Weapon.Damage);
+            if (target.IsDodging)
+            {
+                Random random = new Random();
+                int dodgeChance = random.Next(1, 101);
 
+                if (dodgeChance <= 30) 
+                {
+                    Console.WriteLine($"{target.Name} dodged the attack!");
+                    return;
+                }
+
+                else{
+                Console.WriteLine($"{target.Name} failed to dodge!");
+            }
+
+
+        public void SpecialAttack(Character target)
+{
+
+        if (SpecialCooldown > 0)
+{
+    Console.WriteLine($"Special attack is on cooldown for {SpecialCooldown} more turns!");
+    return;
+}
+
+    Console.WriteLine($"{Name} does a special attack!");
+
+    if (target.IsDodging)
+    {
+        Random random = new Random();
+        int dodgeChance = random.Next(1, 101);
+
+        if (dodgeChance <= 30)
+        {
+            Console.WriteLine($"{target.Name} dodged the attack!");
+            return;
+        }
+        else
+        {
+            Console.WriteLine($"{target.Name} failed to dodge!");
+        }
+    }
+
+    int specialDamage = Weapon.Damage + Weapon.Damage / 2;
+    target.TakeDamage(specialDamage);
+    SpecialCooldown = 3;
+}
+
+            target.TakeDamage(Weapon.Damage);
+            // Give XP if the player defeats an enemy
             if (!target.IsAlive())
             {
                 if (target is Enemy enemy)
@@ -37,6 +86,7 @@ namespace Rpg
         public void GainExperience(int xpGained)
         {
             Experience += xpGained;
+
             Console.WriteLine($"{Name} gained {xpGained} XP!");
 
             CheckLevelUp();

@@ -12,3 +12,4 @@
 /Users/noman/Documents/Essa/code/vscode-practise/RpgGame/obj/Debug/net10.0/RpgGame.pdb
 /Users/noman/Documents/Essa/code/vscode-practise/RpgGame/obj/Debug/net10.0/RpgGame.genruntimeconfig.cache
 /Users/noman/Documents/Essa/code/vscode-practise/RpgGame/obj/Debug/net10.0/ref/RpgGame.dll
+/Users/noman/Documents/Essa/code/vscode-practise/RpgGame/obj/Debug/net10.0/RpgGame.sourcelink.json

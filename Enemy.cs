@@ -4,6 +4,7 @@ namespace Rpg
     {
         public int ExperienceReward { get; set; }
         public Weapon Weapon { get; set; }
+
         private Random random = new Random();
 
         public Enemy(string name, int health, int experienceReward, Weapon weapon)
@@ -15,22 +16,23 @@ namespace Rpg
 
         public override void Attack(Character target)
         {
+            Console.WriteLine($"{Name} attacks!");
             target.TakeDamage(Weapon.Damage);
         }
 
-        public void ChooseDefense()
+        public void ChooseAction(Character target)
         {
+            int choice = random.Next(1, 3);
 
-            int OrcChoice = random.Next(1, 3);
-
-            if(OrcChoice == 1){
-
-                 IsDodging = false;
-                    Console.WriteLine("The Orc does not defend.");
+            if (choice == 1)
+            {
+                IsDodging = false;
+                Attack(target);
             }
-            else{
-                    IsDodging = true;
-                    Console.WriteLine("The Orc prepares to dodge!");
+            else
+            {
+                IsDodging = true;
+                Console.WriteLine($"{Name} prepares to dodge!");
             }
         }
     }

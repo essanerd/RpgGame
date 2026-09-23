@@ -4,7 +4,13 @@ namespace Rpg
     {
         public string Name { get; set; }
         public int Health { get; set; }
+
+        // Shield amount
         public int Shield { get; set; }
+
+        // Defense states
+        public bool IsDodging { get; set; }
+        public bool IsShielding { get; set; }
 
         public Character(string name, int health)
         {
@@ -60,7 +66,9 @@ namespace Rpg
             {
                 Shield -= amount;
 
-                Console.WriteLine($"Shield absorbed {amount} damage! Remaining shield: {Shield}");
+                Console.WriteLine(
+                    $"Shield absorbed {amount} damage! Remaining shield: {Shield}"
+                );
             }
             else
             {
@@ -70,8 +78,22 @@ namespace Rpg
 
                 Health -= remainingDamage;
 
-                Console.WriteLine($"Shield broke! {remainingDamage} damage reached {Name}.");
-            }
+                if (Health < 0)
+                {
+                    Health = 0;
+                }
+
+                Console.WriteLine(
+                    $"Shield broke! {remainingDamage} damage reached {Name}."
+                );
+
+                if (!IsAlive())
+                {
+                    Console.WriteLine($"{Name} has been defeated!");
+                }
+   ```csharp
         }
     }
 }
+
+
