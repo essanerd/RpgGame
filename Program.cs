@@ -36,6 +36,8 @@
             // =========================
 
             Enemy orc = new Enemy("Orc", 200, 25, axe);
+            Enemy goblin = new Enemy("Goblin", 100, 15, mace);
+            Enemy dragon = new Enemy("Dragon", 300, 50, sword);
 
             // =========================
             // STARTING INFORMATION
@@ -53,6 +55,8 @@
 
             Console.WriteLine($"Enemy: {orc.Name}");
             Console.WriteLine($"Health: {orc.Health}");
+            Console.WriteLine($"Enemy: {goblin.Name}");
+            Console.WriteLine($"Health: {goblin.Health}");
             Console.WriteLine();
 
             inventory.ShowWeapons();
@@ -66,7 +70,7 @@
             // COMBAT LOOP
             // =========================
 
-            while (joe.IsAlive() && orc.IsAlive())
+            while (joe.IsAlive() && (orc.IsAlive() || goblin.IsAlive()))
             {
                 // =========================
                 // JOE'S ACTION
@@ -80,55 +84,58 @@
                 Console.WriteLine($"XP: {joe.Experience}");
                 Console.WriteLine($"Potions: {joe.Potions}");
                 Console.WriteLine($"Equipped Weapon: {joe.Weapon.Name}");
+                if (joe.SpecialCooldown > 0)
+                {
+                    Console.WriteLine($"Special Attack cooldown: {joe.SpecialCooldown} turns");
+                }
+                else
+                {
+                    Console.WriteLine("Special Attack: READY!");
+                }
                 Console.WriteLine();
-
                 Console.WriteLine("1. Attack");
                 Console.WriteLine("2. Use Potion");
                 Console.WriteLine("3. Inventory");
+                Console.WriteLine("4. Special Attack");
 
                 Console.Write("Choose an action: ");
                 string choice = Console.ReadLine();
 
                 switch (choice)
                 {
-                    // =========================
-                    // ATTACK
-                    // =========================
-
                     case "1":
+                        Console.WriteLine("Which enemy do you want to attack?");
+                        Console.WriteLine("1. Orc");
+                        Console.WriteLine("2. Goblin");
 
-                        if (orc.IsDodging)
-                        {
-                            Console.WriteLine("The Orc dodged your attack!");
-                            orc.IsDodging = false;
-                        }
-                        else
+                        string enemyChoice = Console.ReadLine();
+
+                        if (enemyChoice == "1")
                         {
                             joe.Attack(orc);
                             Console.WriteLine($"Orc health: {orc.Health}");
                         }
-
-                        break;
-
-                    // =========================
-                    // POTION
-                    // =========================
-
-                    case "2":
-
-                        if (!joe.UsePotion())
+                        else if (enemyChoice == "2")
                         {
+                            joe.Attack(goblin);
+                            Console.WriteLine($"Goblin health: {goblin.Health}");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid enemy choice!");
                             continue;
                         }
 
                         break;
 
-                    // =========================
-                    // INVENTORY
-                    // =========================
+                    case "2":
+                        if (!joe.UsePotion())
+                        {
+                            continue;
+                        }
+                        break;
 
                     case "3":
-
                         Console.WriteLine();
                         Console.WriteLine("===== INVENTORY =====");
 
@@ -159,8 +166,35 @@
 
                         continue;
 
-                    default:
+                    case "4":
+                        Console.WriteLine("Which enemy do you want to use your special attack on?");
+                        Console.WriteLine("1. Orc");
+                        Console.WriteLine("2. Goblin");
 
+                        string specialEnemyChoice = Console.ReadLine();
+
+                        if (specialEnemyChoice == "1")
+                        {
+                            joe.SpecialAttack(orc);
+                            Console.WriteLine($"Orc health: {orc.Health}");
+                        }
+                        else if (specialEnemyChoice == "2")
+                        {
+                            joe.SpecialAttack(goblin);
+                            Console.WriteLine($"Goblin health: {goblin.Health}");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid enemy choice!");
+                            continue;
+                        }
+                        if (joe.SpecialCooldown > 0)
+                        {
+                            joe.SpecialCooldown--;
+                        }
+                        break;
+
+                    default:
                         Console.WriteLine("Invalid choice!");
                         continue;
                 }
@@ -168,10 +202,18 @@
                 // =========================
                 // CHECK IF ORC DIED
                 // =========================
-
-                if (!orc.IsAlive())
+                if (!orc.IsAlive() && !goblin.IsAlive())
                 {
                     break;
+                }
+
+                // =========================
+                // DECREASE SPECIAL COOLDOWN
+                // =========================
+
+                if (joe.SpecialCooldown > 0)
+                {
+                    joe.SpecialCooldown--;
                 }
 
                 // =========================
@@ -213,41 +255,76 @@
                     Console.WriteLine("Invalid defense choice!");
                     continue;
                 }
-
                 // =========================
-                // ORC'S TURN
+                // ENEMY'S TURN
                 // =========================
 
                 Console.WriteLine();
-                Console.WriteLine("===== ORC'S TURN =====");
+                Console.WriteLine("===== ENEMY'S TURN =====");
+                if (orc.IsAlive() && goblin.IsAlive())
+                {
+                    int enemyChoice = random.Next(1, 3);
 
+                    if (enemyChoice == 1)
+                    {
+                        attackingEnemy = orc;
+                    }
+                    else
+                    {
+                        attackingEnemy = goblin;
+                    }
+                }
+                else if (orc.IsAlive())
+                {
+                    attackingEnemy = orc;
+                }
+                else
+                {
+                    attackingEnemy = goblin;
+                }
                 if (joe.IsDodging)
                 {
                     int dodgeChance = random.Next(1, 101);
 
                     if (dodgeChance <= 30)
                     {
-                        Console.WriteLine("Joe dodged the Orc's attack!");
+                        Console.WriteLine($"Joe dodged the {attackingEnemy.Name}'s attack!");
                     }
                     else
                     {
                         Console.WriteLine("Joe failed to dodge!");
-
-                        orc.Attack(joe);
+                        attackingEnemy.Attack(joe);
                     }
-                        orc.ChooseAction(joe);
                 }
                 else if (joe.IsShielding)
                 {
                     Console.WriteLine("Joe blocks the attack with his shield!");
-
-                    joe.BlockAttack(orc.Weapon.Damage);
+                    joe.BlockAttack(attackingEnemy.Weapon.Damage);
                 }
                 else
                 {
-                    orc.Attack(joe);
+                    attackingEnemy.Attack(joe);
                 }
 
+                Console.WriteLine($"Joe health: {joe.Health}");
+
+                if (orc.IsAlive())
+                {
+                    orc.IsDodging = random.Next(1, 101) <= 30;
+                }
+                else
+                {
+                    goblin.IsDodging = random.Next(1, 101) <= 30;
+                }
+
+                if (orc.IsAlive() && orc.IsDodging)
+                {
+                    Console.WriteLine("The Orc prepares to dodge!");
+                }
+                else if (goblin.IsAlive() && goblin.IsDodging)
+                {
+                    Console.WriteLine("The Goblin prepares to dodge!");
+                }
                 // =========================
                 // RESET JOE'S DEFENSE
                 // =========================
@@ -293,4 +370,3 @@
         }
     }
 }
-
